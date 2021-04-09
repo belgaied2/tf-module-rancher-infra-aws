@@ -35,7 +35,7 @@ resource "aws_lb_target_group" "rancher_lb_tg_443" {
   protocol = "TCP"
   vpc_id   = data.aws_vpc.default.id
   health_check {
-    protocol = "HTTP"
+    protocol = "HTTPS"
     path = "/healthz"
     matcher = "200-399"
   }
@@ -46,36 +46,36 @@ resource "aws_lb_target_group" "rancher_lb_tg_443" {
 resource "aws_lb_target_group_attachment" "rancher_lb_tg_attach_80_all" {
   count = var.deploy_lb ? var.node_all_count : 0
 
-  target_group_arn = aws_lb_target_group.rancher_lb_tg_80[count.index].arn
+  target_group_arn = aws_lb_target_group.rancher_lb_tg_80[0].arn
   target_id        = aws_instance.node_all[count.index].id
-  port             = aws_lb_target_group.rancher_lb_tg_80[count.index].port
+  port             = aws_lb_target_group.rancher_lb_tg_80[0].port
 }
 
 # Create lb target group attachment on port 80 for node_worker instances
 resource "aws_lb_target_group_attachment" "rancher_lb_tg_attach_80_worker" {
   count = var.deploy_lb ? var.node_worker_count : 0
 
-  target_group_arn = aws_lb_target_group.rancher_lb_tg_80[count.index].arn
+  target_group_arn = aws_lb_target_group.rancher_lb_tg_80[0].arn
   target_id        = aws_instance.node_worker[count.index].id
-  port             = aws_lb_target_group.rancher_lb_tg_80[count.index].port
+  port             = aws_lb_target_group.rancher_lb_tg_80[0].port
 }
 
 # Create lb target group attachment on port 443 for node_all instances
 resource "aws_lb_target_group_attachment" "rancher_lb_tg_attach_443_all" {
   count = var.deploy_lb ? var.node_all_count : 0
 
-  target_group_arn = aws_lb_target_group.rancher_lb_tg_443[count.index].arn
+  target_group_arn = aws_lb_target_group.rancher_lb_tg_443[0].arn
   target_id        = aws_instance.node_all[count.index].id
-  port             = aws_lb_target_group.rancher_lb_tg_80[count.index].port
+  port             = aws_lb_target_group.rancher_lb_tg_80[0].port
 }
 
 # Create lb target group attachment on port 443 for node_worker instances
 resource "aws_lb_target_group_attachment" "rancher_lb_tg_attach_443_worker" {
   count = var.deploy_lb ? var.node_worker_count : 0
 
-  target_group_arn = aws_lb_target_group.rancher_lb_tg_443[count.index].arn
+  target_group_arn = aws_lb_target_group.rancher_lb_tg_443[0].arn
   target_id        = aws_instance.node_worker[count.index].id
-  port             = aws_lb_target_group.rancher_lb_tg_80[count.index].port
+  port             = aws_lb_target_group.rancher_lb_tg_80[0].port
 }
 
 # Create lb listener on port 80
@@ -87,7 +87,7 @@ resource "aws_lb_listener" "rancher_lb_listen_80" {
   protocol          = "TCP"
   default_action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.rancher_lb_tg_80[count.index].arn
+    target_group_arn = aws_lb_target_group.rancher_lb_tg_80[0].arn
   }
 }
 
@@ -100,6 +100,6 @@ resource "aws_lb_listener" "rancher_lb_listen_443" {
   protocol          = "TCP"
   default_action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.rancher_lb_tg_443[count.index].arn
+    target_group_arn = aws_lb_target_group.rancher_lb_tg_443[0].arn
   }
 }
