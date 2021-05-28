@@ -29,7 +29,7 @@ resource "aws_instance" "node_master" {
   tags = {
     Name     = "${var.prefix}-node-worker-${count.index}"
     K8sRoles = "controlplane,etcd"
-    TFModule = "var.prefix
+    TFModule = var.prefix
   }
 }
 
@@ -61,7 +61,7 @@ resource "aws_instance" "node_worker" {
   tags = {
     Name     = "${var.prefix}-node-worker-${count.index}"
     K8sRoles = "worker"
-    TFModule = "var.prefix
+    TFModule = var.prefix
   }
 }
 
