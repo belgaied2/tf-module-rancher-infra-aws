@@ -66,7 +66,7 @@ resource "aws_lb_target_group_attachment" "rancher_lb_tg_attach_443_all" {
 
   target_group_arn = aws_lb_target_group.rancher_lb_tg_443[0].arn
   target_id        = aws_instance.node_all[count.index].id
-  port             = aws_lb_target_group.rancher_lb_tg_80[0].port
+  port             = aws_lb_target_group.rancher_lb_tg_443[0].port
 }
 
 # Create lb target group attachment on port 443 for node_worker instances
@@ -75,7 +75,7 @@ resource "aws_lb_target_group_attachment" "rancher_lb_tg_attach_443_worker" {
 
   target_group_arn = aws_lb_target_group.rancher_lb_tg_443[0].arn
   target_id        = aws_instance.node_worker[count.index].id
-  port             = aws_lb_target_group.rancher_lb_tg_80[0].port
+  port             = aws_lb_target_group.rancher_lb_tg_443[0].port
 }
 
 # Create lb listener on port 80
